@@ -24,6 +24,11 @@ import json
 
 app = FastAPI()
 
+@app.get("/")
+def read_root():
+
+    return {"message": "Welcome to the Medicine Tracker API! Visit /docs for API documentation."}
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -125,6 +130,17 @@ def delete_med(name: str = Form(...)):
     return {"error": "Medicine not found"}
 
 # Add your average function here
+
+@app.get("/average_price")
+def average_price():
+    with open ('data.json') as meds:
+        data = json.loadI(meds)
+        prices = [med['price'] for med in data['medicines'] if med['price'] is not None]
+        if not prices:
+            return {"message" : "No valid prices available to calculate average."}
+        average = sum(prices) / len(prices)
+    return {"average price" : round(average, 2)}
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
