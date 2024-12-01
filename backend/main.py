@@ -134,7 +134,7 @@ def delete_med(name: str = Form(...)):
 @app.get("/average_price")
 def average_price():
     with open ('data.json') as meds:
-        data = json.loadI(meds)
+        data = json.load(meds)
         prices = [med['price'] for med in data['medicines'] if med['price'] is not None]
         if not prices:
             return {"message" : "No valid prices available to calculate average."}
