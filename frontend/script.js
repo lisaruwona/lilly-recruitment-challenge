@@ -30,6 +30,30 @@ function displayMedicines(medicines) {
         
         `;
 
+        const priceInput = document.createElement("input");
+        priceInput.type = "number";
+        priceInput.step = "0.01";
+        priceInput.placeholder = "New Price";
+        priceInput.className = "price-input";
+
+        const updateButton = document.createElement("button");
+        updateButton.textContent = "Update";
+        updateButton.className = "update-button";
+        updateButton.addEventListener("click", async () => {
+            const newPrice = parseFloat(priceInput.value);
+            if (!isNaN(newPrice)) {
+                await updateMedicine (name, newPrice);
+                fetchMedicines();
+            } else {
+                alert("Please enter a valid price.");
+            }
+        });
+
+        medicineCard.appendChild(priceInput);
+        medicineCard.appendChild(updateButton);
+
+
+
         //create delete button
         const deleteButton = document.createElement("button");
         deleteButton.textContent = "Delete";
@@ -47,12 +71,37 @@ function displayMedicines(medicines) {
 
 }
 
+async function updateMedicine(name, newPrice) {
+    try {
+        const response = await fetch ("http://127.0.0.1:8000/update", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+                name: name,
+                price: newPrice,
+            }),
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            console.log(result.message);
+            alert(result.message);
+        } else {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+    } catch (error) {
+        console.error("Error updating medicine: ", error);
+    }
+}
+
 async function deleteMedicine(name) {
     try {
         const response = await fetch("http://127.0.0.1:8000/delete", {
             method: "DELETE",
             headers: {
-                "Content-Type" : "application/x-www-form-urlencoded",
+                "Content-Type": "application/x-www-form-urlencoded",
             },
             body: new URLSearchParams({
                 name: name,
@@ -70,8 +119,6 @@ async function deleteMedicine(name) {
         console.error("Error deleting medicine: ", error);
     }
 } 
-
-
 
 document.addEventListener("DOMContentLoaded", () => {
     fetchMedicines();

@@ -75,6 +75,29 @@ h2 {
     color: #555;
 }
 
+.update-button {
+    padding: 0.5rem 1rem;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 0.5rem;
+}
+
+.update-button:hover{
+    background-color: #218838;
+}
+
+
+.price-input {
+    margin-top: 0.5rem;
+    padding:0.3rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 50%;
+}
+
 .delete-button {
     padding: 0.5rem 1rem;
     background-color: #FF6347;
